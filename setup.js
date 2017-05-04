@@ -15,10 +15,10 @@ window.onload = function(){
   
   // create an engine
   var engine = Matter.Engine.create();
-
+  
   // create a renderer
   var render = Matter.Render.create({
-    element: document.body,
+    element: document.getElementById('game-container'),
     engine: engine,
     options: {
       wireframes: false,
@@ -30,6 +30,8 @@ window.onload = function(){
   var game = new Game(engine, render);
   var lvl1 = new Level1({w:480,h:800});
   game.addLevel(lvl1);
+  
+  var c = new Console({w:480,h:800});
   
 }
 
