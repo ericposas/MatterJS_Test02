@@ -2,8 +2,8 @@
 function Build(x, y, id, type){
   var bod;
   switch(type){
-    case 'platform-a':
-      bod = Matter.Bodies.rectangle(x, y, 140, 40, {
+    case 'brick-a':
+      bod = Matter.Bodies.rectangle(x, y, 40, 40, {
         id: id,
         isStatic: true
       });

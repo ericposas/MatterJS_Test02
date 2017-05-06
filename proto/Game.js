@@ -25,6 +25,14 @@ function Game(engine, render, props){
   this.start();
 }
 
+Game.prototype.addBody = function(body){
+  Matter.World.add(this.engine.world, body);
+}
+
+Game.prototype.removeBody = function(body){
+  Matter.World.remove(this.engine.world, body);
+}
+
 Game.prototype.addLevel = function(lvl){
   Matter.World.add(this.engine.world, lvl);
 }

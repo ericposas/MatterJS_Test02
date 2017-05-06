@@ -2,6 +2,7 @@ window.onload = function(){
   
   page.properties.title = 'Matter.js Test 02';
   page.setup_gamepage();
+  var c = new Console({w:480,h:800});
   
   // MODULES //
 
@@ -28,10 +29,11 @@ window.onload = function(){
   });
   
   var game = new Game(engine, render);
-  var lvl1 = new Level1({w:480,h:800});
+  
+  var lvl1 = new Level({w:480,h:800}, Levels.lvl1);
   game.addLevel(lvl1);
   
-  var c = new Console({w:480,h:800});
-  
+  c.comment('Oh well mama..');
+   
 }
 
