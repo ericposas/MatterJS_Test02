@@ -1,3 +1,8 @@
+var GameObjects = {
+  boxes : [],
+  bricks : []
+};
+
 //GAME CLASS
 function Game(engine, render, props){
   // METHODS //
