@@ -33,10 +33,9 @@ window.onload = function(){
   var lvl1 = new Level({w:480,h:800}, Levels.lvl1);
   game.addLevel(lvl1);
   
-  game.removeBody(GameObjects.boxes[0]);
-  game.removeBody(GameObjects.boxes[1]);
-  game.removeBody(GameObjects.boxes[2]);
-  game.removeBody(GameObjects.boxes[3]);
+  for(var i = 0; i < GameObjects.boxes.length - 4; i++){
+    game.removeBody(GameObjects.boxes[i]);
+  }
   
 }
 
