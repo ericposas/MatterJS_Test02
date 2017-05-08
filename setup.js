@@ -1,41 +1,27 @@
 window.onload = function(){
   
+  // WEB PAGE SET UP
   page.properties.title = 'Matter.js Test 02';
   page.setup_gamepage();
+  
+  // DEBUGGING CONSOLE 
   var c = new Console({w:480,h:800});
   window.c = c;
+  
+  // KEY PRESSES OBJECT 
   var keys = new Keys();
-  
-  // MODULES //
-
-  // module aliases
-  var Engine = Matter.Engine,
-      Render = Matter.Render,
-      World = Matter.World,
-      Bodies = Matter.Bodies,
-      Body = Matter.Body,
-      Runner = Matter.Runner;
-  
-  // create an engine
-  var engine = Matter.Engine.create();
-  
-  // create a renderer
-  var render = Matter.Render.create({
-    element: document.getElementById('game-container'),
-    engine: engine,
-    options: {
-      wireframes: false,
-      width: 480,
-      height: 800
-    }
-  });
-  
-  var game = new Game(engine, render);
-  
-  var lvl1 = new Level({game:game,w:480,h:800}, Levels.lvl1);
-  game.addLevel(lvl1);
+  // GAME SET UP
+  var lvl1 = new Level('Level1', Levels.level1);
+  var game = new Game();
+  game.w = 480;
+  game.h = 800;
   game.name = "Super Julio";
+  game.addLevel(lvl1);
+  
+  
   c.comment(game.name);
+  //c.comment(game.dimensions);
+  //c.comment(game.currentLevel);
   
   
   

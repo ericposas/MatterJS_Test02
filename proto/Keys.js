@@ -34,11 +34,9 @@ Keys.prototype.clicktest = function(){
 Keys.prototype.keysdown = function(e){
   if(e.keyCode == KEYCODES.leftarrow){
     KEYSTATES.leftarrow = 'down';
-    c.comment('left is ' + KEYSTATES.leftarrow);
   }
   if(e.keyCode == KEYCODES.rightarrow){
     KEYSTATES.rightarrow = 'down';
-    c.comment('right is ' + KEYSTATES.rightarrow);
   }
 }
 
@@ -46,12 +44,10 @@ Keys.prototype.keysdown = function(e){
 Keys.prototype.keysup = function(e){
   if(e.keyCode == KEYCODES.leftarrow){
     KEYSTATES.leftarrow = 'up';
-    c.comment('left is ' + KEYSTATES.leftarrow);
   }
   if(e.keyCode == KEYCODES.rightarrow){
     KEYSTATES.rightarrow = 'up';
-    c.comment('right is ' + KEYSTATES.rightarrow);
   }
-  
 }
+
 

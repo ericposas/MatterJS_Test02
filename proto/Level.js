@@ -1,27 +1,22 @@
 // LEVEL CLASS  
 
-function Level(props, rows){
-  this.props = props;
+function Level(name, rows){
   var layout = this.layout(rows);
-  return layout;
+  this.name = name;
+  return { name:this.name, layout:layout, boxes:this.boxes, bricks:this.bricks};
 }
 
 Level.prototype.layout = function(rows){
   var blocks = [];
   var box_count = 0;
   var brick_count = 0;
-  // build level layout based on above grid 
+  // build level layout based on grid passed in 
   for(var i = 0; i < rows.length; i++){ 
     for(var o = 0; o < rows[i].length; o++){
       if(rows[i][o] == 1){
         brick_count+=1;
         var brick = Build((o*40)+20, (i*40)+20, 'brick-'+brick_count, 'brick-a');
-        //GameObjects.bricks.push(brick);
-        if(this.props.game){
-          this.props.game.bricks.push(brick);
-        }else{
-          console.error('You need to pass in the main Game object');
-        }
+        this.bricks.push(brick);
         blocks.push(brick);
       }
       if(rows[i][o] == 2){
@@ -36,21 +31,38 @@ Level.prototype.layout = function(rows){
             }
           }
         });
-        //GameObjects.boxes.push(box);
-        if(this.props.game){
-          this.props.game.boxes.push(box);
-        }else{
-          console.error('You need to pass in the main Game object');
-        }
+        this.boxes.push(box);
         blocks.push(box);
       }
     }
   }
-  c.comment(this.props.game.boxes);
   // return the layout
   return blocks;
 }
 
-Level.prototype.getBricks = function(){
-  return this.bricks;
-}
+Object.defineProperties(Level.prototype, {
+  name: {
+    set: function(val){
+      this._name = val;
+    },
+    get: function(){
+      return this._name;
+    }
+  },
+  boxes: {
+    get: function(){
+      if(!this._boxes){
+        this._boxes = [];
+      }
+      return this._boxes;
+    }
+  },
+  bricks: {
+    get: function(){
+      if(!this._bricks){
+        this._bricks = [];
+      }
+      return this._bricks;
+    }
+  }
+});
