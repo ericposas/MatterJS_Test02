@@ -3,6 +3,8 @@ window.onload = function(){
   page.properties.title = 'Matter.js Test 02';
   page.setup_gamepage();
   var c = new Console({w:480,h:800});
+  window.c = c;
+  var keys = new Keys();
   
   // MODULES //
 
@@ -30,13 +32,11 @@ window.onload = function(){
   
   var game = new Game(engine, render);
   
-  var lvl1 = new Level({w:480,h:800}, Levels.lvl1);
+  var lvl1 = new Level({game:game,w:480,h:800}, Levels.lvl1);
   game.addLevel(lvl1);
+  game.name = "Super Julio";
+  c.comment(game.name);
   
-  game.removeBody(GameObjects.boxes[0]);
-  game.removeBody(GameObjects.boxes[1]);
-  game.removeBody(GameObjects.boxes[2]);
-  game.removeBody(GameObjects.boxes[3]);
+  
   
 }
-

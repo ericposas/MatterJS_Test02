@@ -1,7 +1,7 @@
-var GameObjects = {
-  boxes : [],
-  bricks : []
-};
+//var GameObjects = {
+//  boxes : [],
+//  bricks : []
+//};
 
 //GAME CLASS
 function Game(engine, render, props){
@@ -20,9 +20,18 @@ function Game(engine, render, props){
     // run game loop
     gameLoop();
     function gameLoop(){
-      //Matter.Runner.tick(runner, engine, 1000/60);
+      scroll();
       Matter.Engine.update(engine, 1000/60, 1);
       requestAnimationFrame(gameLoop);
+    }
+  }
+  function scroll(){
+    if(KEYSTATES.leftarrow == 'down'){
+      // some code to scroll everything to the left
+      
+    }
+    if(KEYSTATES.rightarrow == 'down'){
+      // some code to scroll right 
     }
   }
   
@@ -46,3 +55,46 @@ Game.prototype.removeLevel = function(lvl){
   Matter.World.remove(this.engine.world, lvl);
 }
 
+Object.defineProperty(Game.prototype, "name", {
+  set: function(val){
+    this._name = val;
+  },
+  get: function(){
+    return this._name;
+  }
+});
+
+Object.defineProperties(Game.prototype, {
+  "boxes" : {
+    get: function(){
+      if(!this._boxes){
+        this._boxes = [];
+      }
+      return this._boxes;
+    }
+  },
+  "bricks" : {
+    get: function(){
+      if(!this._bricks){
+        this._bricks = [];
+      }
+      return this._bricks;
+    }
+  }
+});
+
+
+//Object.defineProperty(Game.prototype, "boxes", {
+//  set: function(val){
+//    if(!this._boxes){
+//      this._boxes = [];
+//    }
+//    this._boxes = val;
+//  },
+//  get: function(){
+//    if(!this._boxes){
+//      this._boxes = [];   
+//    }
+//    return this._boxes;
+//  }
+//});

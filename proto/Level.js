@@ -16,7 +16,12 @@ Level.prototype.layout = function(rows){
       if(rows[i][o] == 1){
         brick_count+=1;
         var brick = Build((o*40)+20, (i*40)+20, 'brick-'+brick_count, 'brick-a');
-        GameObjects.bricks.push(brick);
+        //GameObjects.bricks.push(brick);
+        if(this.props.game){
+          this.props.game.bricks.push(brick);
+        }else{
+          console.error('You need to pass in the main Game object');
+        }
         blocks.push(brick);
       }
       if(rows[i][o] == 2){
@@ -31,11 +36,17 @@ Level.prototype.layout = function(rows){
             }
           }
         });
-        GameObjects.boxes.push(box);
+        //GameObjects.boxes.push(box);
+        if(this.props.game){
+          this.props.game.boxes.push(box);
+        }else{
+          console.error('You need to pass in the main Game object');
+        }
         blocks.push(box);
       }
     }
   }
+  c.comment(this.props.game.boxes);
   // return the layout
   return blocks;
 }
