@@ -34,6 +34,21 @@ Level.prototype.layout = function(rows){
         this.boxes.push(box);
         blocks.push(box);
       }
+      if(rows[i][o] == 'c'){
+        var char = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
+          id: 'character',
+          render: {
+            fillStyle: '#FF0000',
+            sprite: {
+              xScale:0.2,
+              yScale:0.2,
+              texture: ''
+            }
+          }
+        });
+        this.character = char;
+        blocks.push(char);
+      }
     }
   }
   // return the layout
@@ -64,5 +79,19 @@ Object.defineProperties(Level.prototype, {
       }
       return this._bricks;
     }
+  },
+  character: {
+    set: function(val){
+      this._character = val;
+    },
+    get: function(){
+      if(!this._character){
+        c.comment('No character has been set.');
+      }
+      return this._character;
+    }
   }
 });
+
+
+
