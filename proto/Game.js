@@ -1,5 +1,5 @@
 //GAME CLASS
-function Game(){
+function Game(keys){
   var _self = this;
   
   // MATTER JS MODULES //
@@ -35,20 +35,30 @@ function Game(){
     // run game loop
     gameLoop();
     function gameLoop(){
+      testBounds();
       scroll();
       Matter.Engine.update(engine, 1000/60, 1);
       requestAnimationFrame(gameLoop);
     }
   }
   function scroll(){
-    if(KEYSTATES.leftarrow == 'down' && _self.currentLevel.bricks[0].position.x < Globals.stage.adjust){
+    if(KEYSTATES.leftarrow == 'down' && _self.leftBounds == false){
       move('right');
     }
-    if(KEYSTATES.rightarrow == 'down' && _self.currentLevel.bricks[_self.currentLevel.bricks.length-1].position.x > _self.w - Globals.stage.adjust){
+    if(KEYSTATES.rightarrow == 'down' && _self.rightBounds == false){
       move('left');
     }
-    if(KEYSTATES.leftarrow == 'up' && KEYSTATES.rightarrow == 'up'){
-      Globals.char.accel.speed = 0;
+  }
+  function testBounds(){
+    if(_self.currentLevel && _self.currentLevel.bricks[0].position.x < Globals.stage.adjust){
+      _self.leftBounds = false;
+    }else{
+      _self.leftBounds = true;
+    }
+    if(_self.currentLevel && _self.currentLevel.bricks[_self.currentLevel.bricks.length-1].position.x > _self.w - Globals.stage.adjust){
+      _self.rightBounds = false;
+    }else{
+      _self.rightBounds = true;
     }
   }
   function move(direction){
@@ -80,6 +90,56 @@ Game.prototype.addLevel = function(lvl){
 
 Game.prototype.removeLevel = function(lvl){
   Matter.World.remove(this.engine.world, lvl);
+}
+
+//Game.prototype.leftBounds = function(){
+//  if(this.currentLevel.bricks[0].position.x < Globals.stage.adjust){
+//    return true;
+//  }else{
+//    return false;
+//  }
+//}
+//
+//Game.prototype.rightBounds = function(){
+//  if(this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - Globals.stage.adjust){
+//    return true;
+//  }else{
+//    return false;
+//  }
+//}
+
+// works well enough.. but should figure out how to ease the deceleration a bit more 
+Game.prototype.decelerateBodies = function(direction){
+  var _self = this;
+  if(_self.leftBounds == false && _self.rightBounds == false){
+    processDecel();
+  }else{
+    Globals.char.accel.speed = 0;
+  }
+  function processDecel(){
+    // if char speed is still over 0 (the min)
+    if( (Globals.char.accel.speed > Globals.char.accel.min) &&
+       (KEYSTATES.leftarrow != 'down') &&
+       (KEYSTATES.rightarrow != 'down') ){
+      // decrease speed and animate the change 
+      Globals.char.accel.speed = (Globals.char.accel.speed - Globals.char.accel.rate);
+      TweenLite.delayedCall(0.01, function(){
+        decel();
+      });
+    }
+  }
+  function decel(){
+    if(_self.leftBounds == false && _self.rightBounds == false){
+      for(var i = 0; i < _self.currentLevel.layout.length; i++){
+        Matter.Body.translate(_self.currentLevel.layout[i], {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
+      }
+      // call to make it recursive 
+      processDecel();
+    }else{
+      Globals.char.accel.speed = 0;
+    }
+  }
+  
 }
 
 Object.defineProperties(Game.prototype, {
@@ -118,6 +178,22 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._currentLevel;
+    }
+  },
+  leftBounds: {
+    set: function(val){
+      this._leftBounds = val;
+    },
+    get: function(){
+      return this._leftBounds;
+    }
+  },
+  rightBounds: {
+    set: function(val){
+      this._rightBounds = val;
+    },
+    get: function(){
+      return this._rightBounds;
     }
   }
 });
