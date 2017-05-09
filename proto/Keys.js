@@ -16,8 +16,8 @@ var KEYSTATES = {
 
 function Keys(game){
   this.construct();
+  // pass game class instance in order to use the reference 
   this.game = game;
-  c.comment(this.game);
 }
 
 Keys.prototype.construct = function(){
@@ -30,15 +30,21 @@ Keys.prototype.construct = function(){
 }
 
 Keys.prototype.clicktest = function(){
-  c.comment('It works!');
+  c.comment('game container -- click.');
 }
 
 // ARROW KEYS DOWN //
 Keys.prototype.keysdown = function(e){
   if(e.keyCode == KEYCODES.leftarrow){
+    if(Globals.char.accel.speed > 0 && KEYSTATES.leftarrow != 'down'){
+      Globals.char.accel.speed = 0;
+    }
     KEYSTATES.leftarrow = 'down';
   }
   if(e.keyCode == KEYCODES.rightarrow){
+    if(Globals.char.accel.speed > 0 && KEYSTATES.rightarrow != 'down'){
+      Globals.char.accel.speed = 0;
+    }
     KEYSTATES.rightarrow = 'down';
   }
 }

@@ -1,4 +1,4 @@
-//GAME CLASS
+// GAME CLASS //
 function Game(keys){
   var _self = this;
   
@@ -73,27 +73,31 @@ function Game(keys){
   this.start();
 }
 
+
 // METHODS AND PROPERTIES OF THE GAME CLASS 
+
+// Add a body to the world 
 Game.prototype.addBody = function(body){
   Matter.World.add(this.engine.world, body);
 }
 
+// Remove a body from the world 
 Game.prototype.removeBody = function(body){
   Matter.World.remove(this.engine.world, body);
 }
 
-// adds the specified level layout and sets the Game object's currentLevel to the new level in order to access that level's objects (boxes/bricks) 
+// Adds the specified level layout and sets the Game object's currentLevel to the new level in order to access that level's objects (boxes/bricks) -- Level layout is a multi-dimensional array 
 Game.prototype.addLevel = function(lvl){
   Matter.World.add(this.engine.world, lvl.layout);
   this.currentLevel = lvl;
 }
 
+// Remove a level layout 
 Game.prototype.removeLevel = function(lvl){
   Matter.World.remove(this.engine.world, lvl);
 }
 
-
-// Testing Tweening the speed value of char 
+// Decelerate the bodies via a 'keyup' event 
 Game.prototype.decelerateBodies = function(direction){
   var _self = this;
   if(_self.leftBounds == false && _self.rightBounds == false){
@@ -108,10 +112,7 @@ Game.prototype.decelerateBodies = function(direction){
        (KEYSTATES.rightarrow != 'down') ){
       // decrease speed and animate the change 
       Globals.char.accel.speed = (Globals.char.accel.speed - Globals.char.accel.rate);
-      //TweenLite.to(Globals.char.accel, 1, {speed:0});
-      //_self.decel_tl.play();
       TweenLite.delayedCall(0.005, function(){
-        c.comment(Globals.char.accel.speed);
         decel();
       });
     }
@@ -127,10 +128,12 @@ Game.prototype.decelerateBodies = function(direction){
       Globals.char.accel.speed = 0;
     }
   }
-  
 }
 
-Object.defineProperties(Game.prototype, {
+
+// GAME CLASS PROPERTIES //
+
+Object.defineProperties(Game.prototype, { 
   name: {
     set: function(val){
       this._name = val;
@@ -183,15 +186,8 @@ Object.defineProperties(Game.prototype, {
     get: function(){
       return this._rightBounds;
     }
-  },
-  decel_tl: {
-    set: function(val){
-      this._decel_tl = val;
-    },
-    get: function(){
-      return this._decel_tl;
-    }
   }
 });
+
 
 

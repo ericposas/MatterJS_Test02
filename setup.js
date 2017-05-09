@@ -21,9 +21,5 @@ window.onload = function(){
   
   
   c.comment(game.name);
-  //c.comment(game.dimensions);
-  //c.comment(game.currentLevel);
-  //c.comment(keys.game);
-  
   
 }
