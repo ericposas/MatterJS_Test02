@@ -92,23 +92,8 @@ Game.prototype.removeLevel = function(lvl){
   Matter.World.remove(this.engine.world, lvl);
 }
 
-//Game.prototype.leftBounds = function(){
-//  if(this.currentLevel.bricks[0].position.x < Globals.stage.adjust){
-//    return true;
-//  }else{
-//    return false;
-//  }
-//}
-//
-//Game.prototype.rightBounds = function(){
-//  if(this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - Globals.stage.adjust){
-//    return true;
-//  }else{
-//    return false;
-//  }
-//}
 
-// works well enough.. but should figure out how to ease the deceleration a bit more 
+// Testing Tweening the speed value of char 
 Game.prototype.decelerateBodies = function(direction){
   var _self = this;
   if(_self.leftBounds == false && _self.rightBounds == false){
@@ -123,7 +108,10 @@ Game.prototype.decelerateBodies = function(direction){
        (KEYSTATES.rightarrow != 'down') ){
       // decrease speed and animate the change 
       Globals.char.accel.speed = (Globals.char.accel.speed - Globals.char.accel.rate);
-      TweenLite.delayedCall(0.01, function(){
+      //TweenLite.to(Globals.char.accel, 1, {speed:0});
+      //_self.decel_tl.play();
+      TweenLite.delayedCall(0.005, function(){
+        c.comment(Globals.char.accel.speed);
         decel();
       });
     }
@@ -194,6 +182,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._rightBounds;
+    }
+  },
+  decel_tl: {
+    set: function(val){
+      this._decel_tl = val;
+    },
+    get: function(){
+      return this._decel_tl;
     }
   }
 });

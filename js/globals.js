@@ -3,9 +3,9 @@ var Globals = {
   char: {
     accel: {
       speed: 0,
-      rate: 0.5,
+      rate: 0.25,
       min: 0,
-      max: 10
+      max: 8
     }
   },
   stage: {
