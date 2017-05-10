@@ -99,7 +99,7 @@ Game.prototype.move = function (direction){
 // Move character 
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
-  Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
+  Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:-1});
   //Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:(direction == 'right' ? (Globals.char.accel.speed*0.001) : ((Globals.char.accel.speed*0.001)*-1)), y:0});
 }
 

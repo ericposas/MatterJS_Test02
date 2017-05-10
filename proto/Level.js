@@ -30,8 +30,8 @@ Level.prototype.layout = function(rows){
           render: {
             sprite: {
               xScale:0.2,
-              yScale:0.2,
-              texture: 'img/brick_200x200.png'
+              yScale:0.2
+              //,texture: 'img/brick_200x200.png'
             }
           }
         });
