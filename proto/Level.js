@@ -1,22 +1,41 @@
 // LEVEL CLASS  
 
-function Level(props, rows){
-  this.props = props;
+function Level(name, rows){
   var layout = this.layout(rows);
-  return layout;
+  this.name = name;
+  this.rows = rows;
+  return {
+    name:this.name,
+    layout:layout,
+    boxes:this.boxes,
+    bricks:this.bricks,
+    char:this.character,
+    rows:this.rows
+  };
 }
 
 Level.prototype.layout = function(rows){
   var blocks = [];
   var box_count = 0;
   var brick_count = 0;
-  // build level layout based on above grid 
+  // build level layout based on grid passed in 
   for(var i = 0; i < rows.length; i++){ 
     for(var o = 0; o < rows[i].length; o++){
       if(rows[i][o] == 1){
         brick_count+=1;
-        var brick = Build((o*40)+20, (i*40)+20, 'brick-'+brick_count, 'brick-a');
-        GameObjects.bricks.push(brick);
+        var brick = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
+          id: 'brick-'+brick_count,
+          isStatic: true,
+          friction: 0,
+          render: {
+            sprite: {
+              xScale:0.2,
+              yScale:0.2
+              //,texture: 'img/brick_200x200.png'
+            }
+          }
+        });
+        this.bricks.push(brick);
         blocks.push(brick);
       }
       if(rows[i][o] == 2){
@@ -31,8 +50,27 @@ Level.prototype.layout = function(rows){
             }
           }
         });
-        GameObjects.boxes.push(box);
+        this.boxes.push(box);
         blocks.push(box);
+      }
+      if(rows[i][o] == 'c'){
+        var char = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
+          id: 'character',
+          inertia: Infinity,
+          friction: 0,
+          //friction: 0,
+          //isStatic: true,
+          render: {
+            fillStyle: '#FF0000',
+            sprite: {
+              xScale:0.2,
+              yScale:0.2,
+              texture: ''
+            }
+          }
+        });
+        this.character = char;
+        //blocks.push(char);
       }
     }
   }
@@ -40,6 +78,51 @@ Level.prototype.layout = function(rows){
   return blocks;
 }
 
-Level.prototype.getBricks = function(){
-  return this.bricks;
-}
+Object.defineProperties(Level.prototype, {
+  name: {
+    set: function(val){
+      this._name = val;
+    },
+    get: function(){
+      return this._name;
+    }
+  },
+  boxes: {
+    get: function(){
+      if(!this._boxes){
+        this._boxes = [];
+      }
+      return this._boxes;
+    }
+  },
+  bricks: {
+    get: function(){
+      if(!this._bricks){
+        this._bricks = [];
+      }
+      return this._bricks;
+    }
+  },
+  character: {
+    set: function(val){
+      this._character = val;
+    },
+    get: function(){
+      if(!this._character){
+        c.comment('No character has been set.');
+      }
+      return this._character;
+    }
+  },
+  rows: {
+    set: function(val){
+      this._rows = val;
+    },
+    get: function(){
+      return this._rows;
+    }
+  }
+});
+
+
+
