@@ -53,11 +53,11 @@ Keys.prototype.keysdown = function(e){
 Keys.prototype.keysup = function(e){
   if(e.keyCode == KEYCODES.leftarrow){
     KEYSTATES.leftarrow = 'up';
-    this.game.decelerateBodies('right');
+    this.game.decelerate('right');
   }
   if(e.keyCode == KEYCODES.rightarrow){
     KEYSTATES.rightarrow = 'up';
-    this.game.decelerateBodies('left');
+    this.game.decelerate('left');
   }
 }
 

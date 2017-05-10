@@ -29,6 +29,7 @@ Game.prototype.start = function(){
 
 // Testing game boundaries 
 Game.prototype.testBounds = function (){
+  // stage stop-scroll bounds 
   if(this.currentLevel && this.currentLevel.bricks[0].position.x < Globals.stage.adjust){
     this.leftBounds = false;
   }else{
@@ -38,6 +39,17 @@ Game.prototype.testBounds = function (){
     this.rightBounds = false;
   }else{
     this.rightBounds = true;
+  }
+  // character bounds 
+  if(this.currentChar && this.currentChar.position.x > Globals.stage.charlimit.begin){
+    this.charLeftBounds = false;
+  }else{
+    this.charLeftBounds = true;
+  }
+  if(this.currentChar && this.currentChar.position.x < Globals.stage.charlimit.end){
+    this.charRightBounds = false;
+  }else{
+    this.charRightBounds = true;
   }
 }
 
@@ -57,23 +69,44 @@ Game.prototype.gameLoop = function(){
 
 // Scrolling game 
 Game.prototype.scroll = function (){
-  if(KEYSTATES.leftarrow == 'down' && this.leftBounds == false){
-    this.move('right');
+  if(KEYSTATES.leftarrow == 'down'){
+    if(this.leftBounds == false){
+      this.move('right');
+    }
+    if(this.charLeftBounds == false){
+      this.movechar('left');
+    }
   }
-  if(KEYSTATES.rightarrow == 'down' && this.rightBounds == false){
-    this.move('left');
+  if(KEYSTATES.rightarrow == 'down'){
+    if(this.rightBounds == false){
+      this.move('left');
+    }
+    if(this.charRightBounds == false){
+      this.movechar('right');
+    }
   }
 }
 
-// Move bodies 
+
+// Move stage bodies (bricks/boxes/etc.) 
 Game.prototype.move = function (direction){
-  if(Globals.char.accel.speed < Globals.char.accel.max){
-    Globals.char.accel.speed+=Globals.char.accel.rate; 
-  }
+  this.increaseSpeed();
   for(var i = 0; i < this.currentLevel.layout.length; i++){
     Matter.Body.translate(this.currentLevel.layout[i], {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
   }
-  
+}
+
+// Move character 
+Game.prototype.movechar = function(direction){
+  this.increaseSpeed();
+  Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
+}
+
+// Increase speed 
+Game.prototype.increaseSpeed = function(){
+  if(Globals.char.accel.speed < Globals.char.accel.max){
+    Globals.char.accel.speed+=Globals.char.accel.rate; 
+  }
 }
 
 // Add a body to the world 
@@ -100,7 +133,7 @@ Game.prototype.removeLevel = function(lvl){
 }
 
 // Decelerate the bodies via a 'keyup' event 
-Game.prototype.decelerateBodies = function(direction){
+Game.prototype.decelerate = function(direction){
   if(this.leftBounds == false && this.rightBounds == false){
     this.processDecel(direction);
   }else{
@@ -211,6 +244,22 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._rightBounds;
+    }
+  },
+  charLeftBounds: {
+    set: function(val){
+      this._charLeftBounds = val;
+    },
+    get: function(){
+      return this._charLeftBounds;
+    }
+  },
+  charRightBounds: {
+    set: function(val){
+      this._charRightBounds = val;
+    },
+    get: function(){
+      return this._charRightBounds;
     }
   }
 });

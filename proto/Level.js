@@ -26,6 +26,7 @@ Level.prototype.layout = function(rows){
         var brick = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
           id: 'brick-'+brick_count,
           isStatic: true,
+          friction: 0,
           render: {
             sprite: {
               xScale:0.2,
@@ -55,9 +56,10 @@ Level.prototype.layout = function(rows){
       if(rows[i][o] == 'c'){
         var char = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
           id: 'character',
-          //inertia: Infinity,
+          inertia: Infinity,
+          friction: 0,
           //friction: 0,
-          isStatic: true,
+          //isStatic: true,
           render: {
             fillStyle: '#FF0000',
             sprite: {

@@ -3,13 +3,17 @@ var Globals = {
   char: {
     accel: {
       speed: 0,
-      rate: 0.1,
+      rate: 0.5,
       min: 0,
-      max: 5
+      max: 6
     }
   },
   stage: {
-    adjust: 14
+    adjust: 14,
+    charlimit: {
+      begin: 58,
+      end: 422
+    }
   }
   
 }
