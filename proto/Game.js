@@ -60,11 +60,21 @@ Game.prototype.gameLoop = function(){
     this.currentChar.inertia = Infinity;
   }
   this.testBounds();
+  this.testJump();
   this.scroll();
   Matter.Engine.update(this.engine, 1000/60, 1);
   window.requestAnimationFrame(function(){
     _self.gameLoop();
   });
+}
+
+// Test Jump state 
+Game.prototype.testJump = function(){
+  if(this.currentChar.position.y > 441){
+    this.jumpState = 'landed';
+  }else{
+    this.jumpState = 'jumping';
+  }
 }
 
 // Scrolling game 
@@ -99,8 +109,31 @@ Game.prototype.move = function (direction){
 // Move character 
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
-  Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:-1});
+  this.swapsprite(direction);
+  Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? (Globals.char.accel.speed/2) : ((Globals.char.accel.speed/2)*-1)), y:-1});
   //Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:(direction == 'right' ? (Globals.char.accel.speed*0.001) : ((Globals.char.accel.speed*0.001)*-1)), y:0});
+}
+// Swap game character sprite 
+Game.prototype.swapsprite = function(direction){
+  var _self = this;
+  /*if(Globals.char.spriteswap.speed > Globals.char.spriteswap.min){
+    Globals.char.spriteswap.speed-=Globals.char.spriteswap.rate;
+  }*/
+  //var spriteset;
+  if(direction == 'right'){
+    this.charSpriteset = [ 'img/mario01.png', 'img/mario02.png', 'img/jump.png' ];
+  }else{
+    this.charSpriteset = [ 'img/mario01_l.png', 'img/mario02_l.png', 'img/jump_l.png' ];
+  }
+  
+  // currently switches between two sprites.. should make it go through each sprite image in the
+  // array, and start again at position 0 when we reach the end 
+  if(_self.currentChar.render.sprite.texture == _self.charSpriteset[0]){
+    _self.currentChar.render.sprite.texture = _self.charSpriteset[1];
+  }else{
+    _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
+  }
+  
 }
 
 // Increase speed 
@@ -166,6 +199,7 @@ Game.prototype.decel = function (direction){
   }
 }
 Game.prototype.jump = function(){
+  // apply jump force to character 
   Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(Globals.char.jumpAmt*-1)});
 }
 
@@ -271,6 +305,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._jumpState;
+    }
+  },
+  charSpriteset: {
+    set: function(val){
+      this._charSpriteset = val;
+    },
+    get: function(){
+      return this._charSpriteset;
     }
   }
 });

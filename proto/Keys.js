@@ -60,10 +60,12 @@ Keys.prototype.keysup = function(e){
   if(e.keyCode == KEYCODES.leftarrow){
     KEYSTATES.leftarrow = 'up';
     this.game.decelerate('right');
+    this.game.currentChar.render.sprite.texture = this.game.charSpriteset[0];
   }
   if(e.keyCode == KEYCODES.rightarrow){
     KEYSTATES.rightarrow = 'up';
     this.game.decelerate('left');
+    this.game.currentChar.render.sprite.texture = this.game.charSpriteset[0];
   }
 }
 

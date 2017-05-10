@@ -30,8 +30,8 @@ Level.prototype.layout = function(rows){
           render: {
             sprite: {
               xScale:0.2,
-              yScale:0.2
-              //,texture: 'img/brick_200x200.png'
+              yScale:0.2,
+              texture: 'img/brick_200x200.png'
             }
           }
         });
@@ -63,9 +63,9 @@ Level.prototype.layout = function(rows){
           render: {
             fillStyle: '#FF0000',
             sprite: {
-              xScale:0.2,
-              yScale:0.2,
-              texture: ''
+              xScale:0.8,
+              yScale:0.8,
+              texture: 'img/mario01.png'
             }
           }
         });
