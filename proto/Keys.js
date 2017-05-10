@@ -22,7 +22,7 @@ function Keys(game){
 
 Keys.prototype.construct = function(){
   // Add game area click tester
-  document.getElementById('game-container').addEventListener('click', this.clicktest);
+  document.getElementById('game-container').addEventListener('click', this.clicktest.bind(this));
   // Add key up/down detection and state-setting 
   document.body.addEventListener('keydown', this.keysdown.bind(this));
   document.body.addEventListener('keyup', this.keysup.bind(this));

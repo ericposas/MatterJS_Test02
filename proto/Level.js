@@ -3,7 +3,15 @@
 function Level(name, rows){
   var layout = this.layout(rows);
   this.name = name;
-  return { name:this.name, layout:layout, boxes:this.boxes, bricks:this.bricks};
+  this.rows = rows;
+  return {
+    name:this.name,
+    layout:layout,
+    boxes:this.boxes,
+    bricks:this.bricks,
+    char:this.character,
+    rows:this.rows
+  };
 }
 
 Level.prototype.layout = function(rows){
@@ -47,6 +55,9 @@ Level.prototype.layout = function(rows){
       if(rows[i][o] == 'c'){
         var char = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
           id: 'character',
+          //inertia: Infinity,
+          //friction: 0,
+          isStatic: true,
           render: {
             fillStyle: '#FF0000',
             sprite: {
@@ -57,7 +68,7 @@ Level.prototype.layout = function(rows){
           }
         });
         this.character = char;
-        blocks.push(char);
+        //blocks.push(char);
       }
     }
   }
@@ -99,6 +110,14 @@ Object.defineProperties(Level.prototype, {
         c.comment('No character has been set.');
       }
       return this._character;
+    }
+  },
+  rows: {
+    set: function(val){
+      this._rows = val;
+    },
+    get: function(){
+      return this._rows;
     }
   }
 });

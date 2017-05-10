@@ -1,10 +1,6 @@
 // GAME CLASS //
-function Game(){}
-
-// METHODS AND PROPERTIES OF THE GAME CLASS 
-
-// Initialization of Game 
-Game.prototype.start = function(){
+function Game(){
+  // Constructor
   // create an engine
   this.engine = Matter.Engine.create();
   // create a renderer
@@ -17,6 +13,12 @@ Game.prototype.start = function(){
       height: 800
     }
   });
+}
+
+// METHODS AND PROPERTIES OF THE GAME CLASS 
+
+// Initialization of Game 
+Game.prototype.start = function(){
   // run the engine
   Matter.Engine.run(this.engine);
   // run the renderer
@@ -42,6 +44,9 @@ Game.prototype.testBounds = function (){
 // Game loop 
 Game.prototype.gameLoop = function(){
   var _self = this;
+  if(this.currentChar){
+    this.currentChar.inertia = Infinity;
+  }
   this.testBounds();
   this.scroll();
   Matter.Engine.update(this.engine, 1000/60, 1);
@@ -68,6 +73,7 @@ Game.prototype.move = function (direction){
   for(var i = 0; i < this.currentLevel.layout.length; i++){
     Matter.Body.translate(this.currentLevel.layout[i], {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
   }
+  
 }
 
 // Add a body to the world 
@@ -84,6 +90,8 @@ Game.prototype.removeBody = function(body){
 Game.prototype.addLevel = function(lvl){
   Matter.World.add(this.engine.world, lvl.layout);
   this.currentLevel = lvl;
+  Matter.World.add(this.engine.world, lvl.char);
+  this.currentChar = lvl.char;
 }
 
 // Remove a level layout 
@@ -179,6 +187,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._currentLevel;
+    }
+  },
+  currentChar: {
+    set: function(val){
+      this._currentChar = val;
+    },
+    get: function(){
+      return this._currentChar;
     }
   },
   leftBounds: {
