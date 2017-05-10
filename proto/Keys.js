@@ -29,9 +29,11 @@ Keys.prototype.construct = function(){
   
 }
 
+// GAME CONTAINER - CLICK //
 Keys.prototype.clicktest = function(){
   c.comment('game container -- click.');
 }
+
 
 // ARROW KEYS DOWN //
 Keys.prototype.keysdown = function(e){
@@ -46,6 +48,10 @@ Keys.prototype.keysdown = function(e){
       Globals.char.accel.speed = 0;
     }
     KEYSTATES.rightarrow = 'down';
+  }
+  // JUMP //
+  if(e.keyCode == KEYCODES.uparrow){
+    this.game.jump();
   }
 }
 

@@ -100,6 +100,7 @@ Game.prototype.move = function (direction){
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
   Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
+  //Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:(direction == 'right' ? (Globals.char.accel.speed*0.001) : ((Globals.char.accel.speed*0.001)*-1)), y:0});
 }
 
 // Increase speed 
@@ -164,7 +165,9 @@ Game.prototype.decel = function (direction){
     Globals.char.accel.speed = 0;
   }
 }
-
+Game.prototype.jump = function(){
+  Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(Globals.char.jumpAmt*-1)});
+}
 
 // GAME CLASS PROPERTIES //
 
@@ -260,6 +263,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._charRightBounds;
+    }
+  },
+  jumpState: {
+    set: function(val){
+      this._jumpState = val;
+    },
+    get: function(){
+      return this._jumpState;
     }
   }
 });
