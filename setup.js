@@ -11,6 +11,7 @@ window.onload = function(){
   // GAME SET UP
   var lvl1 = new Level('Level1', Levels.level1);
   var game = new Game();
+  game.start();
   game.w = 480;
   game.h = 800;
   game.name = "Super Julio";
@@ -18,7 +19,6 @@ window.onload = function(){
   
   // KEY PRESSES OBJECT 
   var keys = new Keys(game);
-  
   
   c.comment(game.name);
   

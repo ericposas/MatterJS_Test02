@@ -15,7 +15,17 @@ Level.prototype.layout = function(rows){
     for(var o = 0; o < rows[i].length; o++){
       if(rows[i][o] == 1){
         brick_count+=1;
-        var brick = Build((o*40)+20, (i*40)+20, 'brick-'+brick_count, 'brick-a');
+        var brick = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
+          id: 'brick-'+brick_count,
+          isStatic: true,
+          render: {
+            sprite: {
+              xScale:0.2,
+              yScale:0.2,
+              texture: 'img/brick_200x200.png'
+            }
+          }
+        });
         this.bricks.push(brick);
         blocks.push(brick);
       }
