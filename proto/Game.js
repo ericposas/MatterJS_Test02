@@ -36,8 +36,6 @@ Game.prototype.start = function(){
       _self.charStandingOn = 'brick';
       _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
     }
-    //c.comment(str.slice(str.indexOf('B')+1, str.length));
-    //_self.currentChar.render.sprite.texture = _self.charSpriteset[0];
   });
 }
 
