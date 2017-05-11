@@ -1,6 +1,6 @@
 // GAME CLASS //
 function Game(){
-  // Constructor
+  var _self = this;
   // create an engine
   this.engine = Matter.Engine.create();
   // create a renderer
@@ -13,18 +13,32 @@ function Game(){
       height: 800
     }
   });
+  // initial sprite set 
+  this.charSpriteset = [ 'img/mario01.png', 'img/mario02.png', 'img/jump.png' ];
 }
 
 // METHODS AND PROPERTIES OF THE GAME CLASS 
 
 // Initialization of Game 
 Game.prototype.start = function(){
+  var _self = this;
   // run the engine
   Matter.Engine.run(this.engine);
   // run the renderer
   Matter.Render.run(this.render);
   // run game loop
   this.gameLoop();
+  // collision testing 
+  Matter.Events.on(this.engine, 'collisionStart', function(evt){
+    var str = evt.pairs[0].id;
+    if(str.indexOf('brick')){
+      // colliding with a brick instance 
+      _self.charStandingOn = 'brick';
+      _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
+    }
+    //c.comment(str.slice(str.indexOf('B')+1, str.length));
+    //_self.currentChar.render.sprite.texture = _self.charSpriteset[0];
+  });
 }
 
 // Testing game boundaries 
@@ -53,28 +67,28 @@ Game.prototype.testBounds = function (){
   }
 }
 
+Game.prototype.testJump = function(){
+  if(this.currentChar.position.y < 738 && this.charStandingOn != 'brick'){
+    this.jumpState = 'jumping';
+    this.currentChar.render.sprite.texture = this.charSpriteset[2];
+  }else{
+    this.jumpState = 'grounded';
+  }
+}
+
 // Game loop 
 Game.prototype.gameLoop = function(){
   var _self = this;
   if(this.currentChar){
     this.currentChar.inertia = Infinity;
   }
-  this.testBounds();
   this.testJump();
+  this.testBounds();
   this.scroll();
   Matter.Engine.update(this.engine, 1000/60, 1);
   window.requestAnimationFrame(function(){
     _self.gameLoop();
   });
-}
-
-// Test Jump state 
-Game.prototype.testJump = function(){
-  if(this.currentChar.position.y > 441){
-    this.jumpState = 'landed';
-  }else{
-    this.jumpState = 'jumping';
-  }
 }
 
 // Scrolling game 
@@ -115,7 +129,7 @@ Game.prototype.movechar = function(direction){
 }
 // Swap game character sprite 
 Game.prototype.swapsprite = function(direction){
-  var _self = this;
+  //var _self = this;
   /*if(Globals.char.spriteswap.speed > Globals.char.spriteswap.min){
     Globals.char.spriteswap.speed-=Globals.char.spriteswap.rate;
   }*/
@@ -128,10 +142,12 @@ Game.prototype.swapsprite = function(direction){
   
   // currently switches between two sprites.. should make it go through each sprite image in the
   // array, and start again at position 0 when we reach the end 
-  if(_self.currentChar.render.sprite.texture == _self.charSpriteset[0]){
-    _self.currentChar.render.sprite.texture = _self.charSpriteset[1];
+  if(this.jumpState == 'jumping'){
+    this.currentChar.render.sprite.texture = this.charSpriteset[2];
+  }else if(this.currentChar.render.sprite.texture == this.charSpriteset[0]){
+    this.currentChar.render.sprite.texture = this.charSpriteset[1];
   }else{
-    _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
+    this.currentChar.render.sprite.texture = this.charSpriteset[0];
   }
   
 }
@@ -201,6 +217,7 @@ Game.prototype.decel = function (direction){
 Game.prototype.jump = function(){
   // apply jump force to character 
   Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(Globals.char.jumpAmt*-1)});
+  this.charStandingOn = 'nothing';
 }
 
 // GAME CLASS PROPERTIES //
@@ -305,6 +322,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._jumpState;
+    }
+  },
+  charStandingOn: {
+    set: function(val){
+      this._charStandingOn = val;
+    },
+    get: function(){
+      return this._charStandingOn;
     }
   },
   charSpriteset: {
