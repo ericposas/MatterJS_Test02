@@ -9,6 +9,7 @@ function Game(){
     engine: this.engine,
     options: {
       wireframes: false,
+      background: Colors.sky2,
       width: 480,
       height: 800
     }
@@ -37,7 +38,8 @@ Game.prototype.start = function(){
       _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
     }
   });
-  //this.ctx = document.getElementById('canvas').getContext('2d');
+  this.canv = document.getElementsByTagName('canvas')[0];
+  this.ctx = this.canv.getContext('2d');
 }
 
 // Testing game boundaries 
@@ -45,14 +47,14 @@ Game.prototype.testBounds = function (){
   // stage stop-scroll bounds 
   if((this.currentLevel) &&
      (this.currentLevel.bricks[0].position.x < Globals.stage.adjust) &&
-     (this.currentChar.position.x < 380)){
+     (this.currentChar.position.x < Globals.char.walklimit.right)){
     this.leftBounds = false;
   }else{
     this.leftBounds = true;
   }
   if((this.currentLevel) &&
      (this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - Globals.stage.adjust) &&
-     (this.currentChar.position.x > 100)){
+     (this.currentChar.position.x > Globals.char.walklimit.left)){
     this.rightBounds = false;
   }else{
     this.rightBounds = true;
@@ -88,13 +90,22 @@ Game.prototype.gameLoop = function(){
   this.testJump();
   this.testBounds();
   this.scroll();
+  //this.renderCanvas();
   Matter.Engine.update(this.engine, 1000/60, 1);
   window.requestAnimationFrame(function(){
     _self.gameLoop();
   });
 }
 
-// Scrolling game 
+// Render canvas elements (outside of matter.js bodies)
+Game.prototype.renderCanvas = function(){
+  if(this.ctx){
+    this.ctx.fillStyle = '#6b88ff';
+    this.ctx.fillRect(0, 0, this.canv.width, this.canv.height);
+  }
+}
+
+// Scrolling  
 Game.prototype.scroll = function (){
   if(KEYSTATES.leftarrow == 'down'){
     if(this.leftBounds == false){
@@ -127,22 +138,15 @@ Game.prototype.move = function (direction){
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
   this.swapsprite(direction);
-  //var x_translate = (direction == 'right' ? (Globals.char.accel.speed/2) : ((Globals.char.accel.speed/2)*-1));
-  //var x_translate = (direction == 'right' ? 1.0 : -1.0);
   if(this.leftBounds == true || this.rightBounds == true){
     x_translate = (direction == 'right' ? (Globals.char.accel.speed) : ((Globals.char.accel.speed)*-1));
   }else{
-    x_translate = (direction == 'right' ? 1.0 : -1.0);
+    x_translate = (direction == 'right' ? 0 : 0);
   }
   Matter.Body.translate(this.currentChar, {x:x_translate, y:-1});
 }
 // Swap game character sprite 
 Game.prototype.swapsprite = function(direction){
-  //var _self = this;
-  /*if(Globals.char.spriteswap.speed > Globals.char.spriteswap.min){
-    Globals.char.spriteswap.speed-=Globals.char.spriteswap.rate;
-  }*/
-  //var spriteset;
   if(direction == 'right'){
     this.charSpriteset = [ 'img/mario01.png', 'img/mario02.png', 'img/jump.png' ];
   }else{
@@ -242,6 +246,16 @@ Object.defineProperties(Game.prototype, {
       return this._name;
     }
   },
+  // canvas element 
+  canv: {
+    set: function(val){
+      this._canv = val;
+    },
+    get: function(){
+      return this._canv;
+    }
+  },
+  // canvas 2D context
   ctx: {
     set: function(val){
       this._ctx = val;

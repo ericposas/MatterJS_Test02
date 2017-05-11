@@ -21,7 +21,7 @@ window.onload = function(){
   // KEY PRESSES OBJECT 
   var keys = new Keys(game);
   
-  //c.comment(game.currentChar.position.x);  //140
+  //c.comment(game.currentChar.position.x);
   TweenLite.delayedCall(2, function(){
     //c.comment(game.currentChar.position.y);
   });

@@ -13,6 +13,10 @@ var Globals = {
       rate: 0.25,
       min: 0,
       max: 5
+    },
+    walklimit: {
+      left: 140,
+      right: 340
     }
   },
   stage: {

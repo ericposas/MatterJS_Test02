@@ -6,7 +6,11 @@ const KEYCODES = {
   leftarrow : 37,
   rightarrow : 39,
   uparrow : 38,
-  downarrow : 40
+  downarrow : 40,
+  w : 87,
+  a : 65,
+  s : 83,
+  d : 68
 }
 var KEYSTATES = {
   leftarrow : '',
@@ -26,7 +30,6 @@ Keys.prototype.construct = function(){
   // Add key up/down detection and state-setting 
   document.body.addEventListener('keydown', this.keysdown.bind(this));
   document.body.addEventListener('keyup', this.keysup.bind(this));
-  
 }
 
 // GAME CONTAINER - CLICK //
@@ -37,35 +40,35 @@ Keys.prototype.clicktest = function(){
 
 // ARROW KEYS DOWN //
 Keys.prototype.keysdown = function(e){
-  if(e.keyCode == KEYCODES.leftarrow){
+  if((e.keyCode == KEYCODES.leftarrow) || (e.keyCode == KEYCODES.a)){
     if(Globals.char.accel.speed > 0 && KEYSTATES.leftarrow != 'down'){
       Globals.char.accel.speed = 0;
     }
     KEYSTATES.leftarrow = 'down';
   }
-  if(e.keyCode == KEYCODES.rightarrow){
+  if((e.keyCode == KEYCODES.rightarrow) || (e.keyCode == KEYCODES.d)){
     if(Globals.char.accel.speed > 0 && KEYSTATES.rightarrow != 'down'){
       Globals.char.accel.speed = 0;
     }
     KEYSTATES.rightarrow = 'down';
   }
   // JUMP //
-  if(e.keyCode == KEYCODES.uparrow){
+  if((e.keyCode == KEYCODES.uparrow) || (e.keyCode == KEYCODES.w)){
     this.game.jump();
   }
 }
 
 // ARROW KEYS UP //
 Keys.prototype.keysup = function(e){
-  if(e.keyCode == KEYCODES.leftarrow){
+  if((e.keyCode == KEYCODES.leftarrow) || (e.keyCode == KEYCODES.a)){
     KEYSTATES.leftarrow = 'up';
     this.game.decelerate('right');
-    this.game.currentChar.render.sprite.texture = this.game.charSpriteset[0];
+    //this.game.currentChar.render.sprite.texture = this.game.charSpriteset[0];
   }
-  if(e.keyCode == KEYCODES.rightarrow){
+  if((e.keyCode == KEYCODES.rightarrow) || (e.keyCode == KEYCODES.d)){
     KEYSTATES.rightarrow = 'up';
     this.game.decelerate('left');
-    this.game.currentChar.render.sprite.texture = this.game.charSpriteset[0];
+    //this.game.currentChar.render.sprite.texture = this.game.charSpriteset[0];
   }
 }
 
