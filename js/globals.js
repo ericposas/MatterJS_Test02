@@ -1,7 +1,7 @@
 var Globals = {
   // should probably move these variables to a Character class ..maybe 
   char: {
-    jumpAmt: 0.075,
+    jumpForce: 0.075,
     spriteswap: {
       //speed: 6,
       rate: 0.05//,
@@ -10,9 +10,9 @@ var Globals = {
     },
     accel: {
       speed: 0,
-      rate: 1,
+      rate: 0.25,
       min: 0,
-      max: 8
+      max: 5
     }
   },
   stage: {

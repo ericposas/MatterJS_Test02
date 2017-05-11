@@ -37,17 +37,22 @@ Game.prototype.start = function(){
       _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
     }
   });
+  //this.ctx = document.getElementById('canvas').getContext('2d');
 }
 
 // Testing game boundaries 
 Game.prototype.testBounds = function (){
   // stage stop-scroll bounds 
-  if(this.currentLevel && this.currentLevel.bricks[0].position.x < Globals.stage.adjust){
+  if((this.currentLevel) &&
+     (this.currentLevel.bricks[0].position.x < Globals.stage.adjust) &&
+     (this.currentChar.position.x < 380)){
     this.leftBounds = false;
   }else{
     this.leftBounds = true;
   }
-  if(this.currentLevel && this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - Globals.stage.adjust){
+  if((this.currentLevel) &&
+     (this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - Globals.stage.adjust) &&
+     (this.currentChar.position.x > 100)){
     this.rightBounds = false;
   }else{
     this.rightBounds = true;
@@ -122,8 +127,14 @@ Game.prototype.move = function (direction){
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
   this.swapsprite(direction);
-  Matter.Body.translate(this.currentChar, {x:(direction == 'right' ? (Globals.char.accel.speed/2) : ((Globals.char.accel.speed/2)*-1)), y:-1});
-  //Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:(direction == 'right' ? (Globals.char.accel.speed*0.001) : ((Globals.char.accel.speed*0.001)*-1)), y:0});
+  //var x_translate = (direction == 'right' ? (Globals.char.accel.speed/2) : ((Globals.char.accel.speed/2)*-1));
+  //var x_translate = (direction == 'right' ? 1.0 : -1.0);
+  if(this.leftBounds == true || this.rightBounds == true){
+    x_translate = (direction == 'right' ? (Globals.char.accel.speed) : ((Globals.char.accel.speed)*-1));
+  }else{
+    x_translate = (direction == 'right' ? 1.0 : -1.0);
+  }
+  Matter.Body.translate(this.currentChar, {x:x_translate, y:-1});
 }
 // Swap game character sprite 
 Game.prototype.swapsprite = function(direction){
@@ -214,8 +225,10 @@ Game.prototype.decel = function (direction){
 }
 Game.prototype.jump = function(){
   // apply jump force to character 
-  Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(Globals.char.jumpAmt*-1)});
-  this.charStandingOn = 'nothing';
+  if(this.jumpState != 'jumping'){
+    Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(Globals.char.jumpForce*-1)});
+    this.charStandingOn = 'nothing';
+  }
 }
 
 // GAME CLASS PROPERTIES //
@@ -227,6 +240,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._name;
+    }
+  },
+  ctx: {
+    set: function(val){
+      this._ctx = val;
+    },
+    get: function(){
+      return this._ctx;
     }
   },
   engine: {
