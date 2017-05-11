@@ -16,6 +16,7 @@ function Game(){
   });
   // initial sprite set 
   this.charSpriteset = [ 'img/mario01.png', 'img/mario02.png', 'img/jump.png' ];
+  if(!this.spritei){ this.spritei = 0; }
 }
 
 // METHODS AND PROPERTIES OF THE GAME CLASS 
@@ -35,7 +36,9 @@ Game.prototype.start = function(){
     if(str.indexOf('brick')){
       // colliding with a brick instance 
       _self.charStandingOn = 'brick';
-      _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
+      if(KEYSTATES.leftarrow != 'down' && KEYSTATES.rightarrow != 'down'){
+        _self.currentChar.render.sprite.texture = _self.charSpriteset[0];
+      }
     }
   });
   this.canv = document.getElementsByTagName('canvas')[0];
@@ -137,6 +140,11 @@ Game.prototype.move = function (direction){
 // Move character 
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
+  if(this.spritei < Globals.char.spriteswap.total_frames){
+    this.spritei++;
+  }else{
+    this.spritei = 0;
+  }
   this.swapsprite(direction);
   if(this.leftBounds == true || this.rightBounds == true){
     x_translate = (direction == 'right' ? (Globals.char.accel.speed) : ((Globals.char.accel.speed)*-1));
@@ -155,11 +163,11 @@ Game.prototype.swapsprite = function(direction){
   
   // currently switches between two sprites.. should make it go through each sprite image in the
   // array, and start again at position 0 when we reach the end 
-  if(this.jumpState == 'jumping'){
+  if(this.jumpState == 'jumping' && this.currentChar.render.sprite.texture != this.charSpriteset[2]){
     this.currentChar.render.sprite.texture = this.charSpriteset[2];
-  }else if(this.currentChar.render.sprite.texture == this.charSpriteset[0]){
+  }else if(this.spritei > Globals.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
     this.currentChar.render.sprite.texture = this.charSpriteset[1];
-  }else{
+  }else if(this.spritei < Globals.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
     this.currentChar.render.sprite.texture = this.charSpriteset[0];
   }
   
@@ -371,6 +379,14 @@ Object.defineProperties(Game.prototype, {
     },
     get: function(){
       return this._charSpriteset;
+    }
+  },
+  spritei: {
+    set: function(val){
+      this._spritei = val;
+    },
+    get: function(){
+      return this._spritei;
     }
   }
 });
