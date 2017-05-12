@@ -23,53 +23,18 @@ Level.prototype.layout = function(rows){
     for(var o = 0; o < rows[i].length; o++){
       if(rows[i][o] == 1){
         brick_count+=1;
-        var brick = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
-          id: 'brick-'+brick_count,
-          isStatic: true,
-          friction: 0,
-          render: {
-            sprite: {
-              xScale:0.2,
-              yScale:0.2,
-              texture: 'img/brick_200x200.png'
-            }
-          }
-        });
+        var brick = new Brick(i,o,brick_count);
         this.bricks.push(brick);
         blocks.push(brick);
       }
       if(rows[i][o] == 2){
         box_count+=1;
-        var box = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
-          id: 'box-'+box_count,
-          render: {
-            sprite: {
-              xScale:0.2,
-              yScale:0.2,
-              texture: 'img/box_200x200.jpg'
-            }
-          }
-        });
+        var box = new Box(i,o,box_count);
         this.boxes.push(box);
         blocks.push(box);
       }
       if(rows[i][o] == 'c'){
-        var char = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
-          //id: 'character',
-          inertia: Infinity,
-          friction: 0,
-          //friction: 0,
-          //isStatic: true,
-          render: {
-            fillStyle: '#FF0000',
-            sprite: {
-              xScale:0.8,
-              yScale:0.8,
-              texture: 'img/mario01.png'
-            }
-          }
-        });
-        this.character = char;
+        this.character = new Character(i,o);
         //blocks.push(char);
       }
     }
