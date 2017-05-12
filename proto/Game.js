@@ -1,4 +1,7 @@
-// GAME 'CLASS' //
+/*************
+ GAME "CLASS"
+*************/
+
 function Game(){
   var _self = this;
   // create an engine
@@ -19,9 +22,11 @@ function Game(){
   if(!this.spritei){ this.spritei = 0; }
 }
 
-// METHODS AND PROPERTIES OF THE GAME 'CLASS' //
 
-// Initialization of Game 
+/*************
+  GAME INIT
+*************/
+
 Game.prototype.start = function(){
   var _self = this;
   // run the engine
@@ -43,6 +48,34 @@ Game.prototype.start = function(){
   });
   this.canv = document.getElementsByTagName('canvas')[0];
   this.ctx = this.canv.getContext('2d');
+}
+
+
+/*************
+  GAME LOOP
+*************/
+
+Game.prototype.gameLoop = function(){
+  var _self = this;
+  if(this.currentChar){
+    this.currentChar.inertia = Infinity;
+  }
+  this.testJump();
+  this.testBounds();
+  this.scroll();
+  //this.renderCanvas();
+  Matter.Engine.update(this.engine, 1000/60, 1);
+  window.requestAnimationFrame(function(){
+    _self.gameLoop();
+  });
+}
+
+// Render canvas elements (outside of matter.js bodies)
+Game.prototype.renderCanvas = function(){
+  if(this.ctx){
+    this.ctx.fillStyle = '#6b88ff';
+    this.ctx.fillRect(0, 0, this.canv.width, this.canv.height);
+  }
 }
 
 // Testing game boundaries 
@@ -84,30 +117,6 @@ Game.prototype.testJump = function(){
   }
 }
 
-// Game loop 
-Game.prototype.gameLoop = function(){
-  var _self = this;
-  if(this.currentChar){
-    this.currentChar.inertia = Infinity;
-  }
-  this.testJump();
-  this.testBounds();
-  this.scroll();
-  //this.renderCanvas();
-  Matter.Engine.update(this.engine, 1000/60, 1);
-  window.requestAnimationFrame(function(){
-    _self.gameLoop();
-  });
-}
-
-// Render canvas elements (outside of matter.js bodies)
-Game.prototype.renderCanvas = function(){
-  if(this.ctx){
-    this.ctx.fillStyle = '#6b88ff';
-    this.ctx.fillRect(0, 0, this.canv.width, this.canv.height);
-  }
-}
-
 // Scrolling  
 Game.prototype.scroll = function (){
   if(KEYSTATES.leftarrow == 'down'){
@@ -128,6 +137,10 @@ Game.prototype.scroll = function (){
   }
 }
 
+
+/*************
+   MOVEMENT
+*************/
 
 // Move stage bodies (bricks/boxes/etc.) 
 Game.prototype.move = function (direction){
@@ -160,9 +173,7 @@ Game.prototype.swapsprite = function(direction){
   }else{
     this.charSpriteset = [ 'img/mario01_l.png', 'img/mario02_l.png', 'img/jump_l.png' ];
   }
-  
-  // currently switches between two sprites.. should make it go through each sprite image in the
-  // array, and start again at position 0 when we reach the end 
+  // currently switches between two sprites 
   if(this.jumpState == 'jumping' && this.currentChar.render.sprite.texture != this.charSpriteset[2]){
     this.currentChar.render.sprite.texture = this.charSpriteset[2];
   }else if(this.spritei > GLOBALS.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
@@ -173,37 +184,12 @@ Game.prototype.swapsprite = function(direction){
   
 }
 
-// Increase speed 
 Game.prototype.increaseSpeed = function(){
   if(GLOBALS.char.accel.speed < GLOBALS.char.accel.max){
     GLOBALS.char.accel.speed+=GLOBALS.char.accel.rate; 
   }
 }
 
-// Add a body to the world 
-Game.prototype.addBody = function(body){
-  Matter.World.add(this.engine.world, body);
-}
-
-// Remove a body from the world 
-Game.prototype.removeBody = function(body){
-  Matter.World.remove(this.engine.world, body);
-}
-
-// Adds the specified level layout and sets the Game object's currentLevel to the new level in order to access that level's objects (boxes/bricks) -- Level layout is a multi-dimensional array 
-Game.prototype.addLevel = function(lvl){
-  Matter.World.add(this.engine.world, lvl.layout);
-  this.currentLevel = lvl;
-  Matter.World.add(this.engine.world, lvl.char);
-  this.currentChar = lvl.char;
-}
-
-// Remove a level layout 
-Game.prototype.removeLevel = function(lvl){
-  Matter.World.remove(this.engine.world, lvl);
-}
-
-// Decelerate the bodies via a 'keyup' event 
 Game.prototype.decelerate = function(direction){
   if(this.leftBounds == false && this.rightBounds == false){
     this.processDecel(direction);
@@ -235,6 +221,7 @@ Game.prototype.decel = function (direction){
     GLOBALS.char.accel.speed = 0;
   }
 }
+
 Game.prototype.jump = function(){
   // apply jump force to character 
   if(this.jumpState != 'jumping'){
@@ -243,7 +230,35 @@ Game.prototype.jump = function(){
   }
 }
 
-// GAME CLASS PROPERTIES //
+
+/*************
+  ADD BODIES
+*************/
+
+Game.prototype.addBody = function(body){
+  Matter.World.add(this.engine.world, body);
+}
+
+Game.prototype.removeBody = function(body){
+  Matter.World.remove(this.engine.world, body);
+}
+
+// Adds the specified level layout and sets the Game object's currentLevel to the new level in order to access that level's objects (boxes/bricks) -- Level layout is a multi-dimensional array 
+Game.prototype.addLevel = function(lvl){
+  Matter.World.add(this.engine.world, lvl.layout);
+  this.currentLevel = lvl;
+  Matter.World.add(this.engine.world, lvl.char);
+  this.currentChar = lvl.char;
+}
+
+Game.prototype.removeLevel = function(lvl){
+  Matter.World.remove(this.engine.world, lvl);
+}
+
+
+/*************
+  PROPERTIES
+*************/
 
 Object.defineProperties(Game.prototype, { 
   name: {

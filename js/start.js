@@ -5,8 +5,7 @@ window.onload = function(){
   page.setup_gamepage();
   
   // DEBUGGING CONSOLE 
-  var c = new Console({w:480,h:800});
-  window.c = c;
+  window.c = new Console({w:480,h:800});
   
   // GAME SET UP
   var lvl1 = new Level(Levels.level1);

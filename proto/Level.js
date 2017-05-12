@@ -1,4 +1,6 @@
-// LEVEL CLASS  
+/*************
+    LEVEL
+*************/  
 
 function Level(level){
   var layout = this.layout(level.lvl);

@@ -1,4 +1,6 @@
-// Layouts of levels 
+/*************
+  LEVEL DEFS
+*************/
 
 var Levels = Levels || {};
 var c = 'c';
