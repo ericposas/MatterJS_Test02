@@ -55,7 +55,7 @@ Level.prototype.layout = function(rows){
       }
       if(rows[i][o] == 'c'){
         var char = Matter.Bodies.rectangle((o*40)+20, (i*40)+20, 40, 40, {
-          id: 'character',
+          //id: 'character',
           inertia: Infinity,
           friction: 0,
           //friction: 0,
