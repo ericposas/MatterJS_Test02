@@ -1,5 +1,4 @@
-var Globals = {
-  // should probably move these variables to a Character class ..maybe 
+var GLOBALS = {
   char: {
     jumpForce: 0.075,
     spriteswap: {

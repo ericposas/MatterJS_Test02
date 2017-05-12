@@ -41,14 +41,14 @@ Keys.prototype.clicktest = function(){
 // ARROW KEYS DOWN //
 Keys.prototype.keysdown = function(e){
   if((e.keyCode == KEYCODES.leftarrow) || (e.keyCode == KEYCODES.a)){
-    if(Globals.char.accel.speed > 0 && KEYSTATES.leftarrow != 'down'){
-      Globals.char.accel.speed = 0;
+    if(GLOBALS.char.accel.speed > 0 && KEYSTATES.leftarrow != 'down'){
+      GLOBALS.char.accel.speed = 0;
     }
     KEYSTATES.leftarrow = 'down';
   }
   if((e.keyCode == KEYCODES.rightarrow) || (e.keyCode == KEYCODES.d)){
-    if(Globals.char.accel.speed > 0 && KEYSTATES.rightarrow != 'down'){
-      Globals.char.accel.speed = 0;
+    if(GLOBALS.char.accel.speed > 0 && KEYSTATES.rightarrow != 'down'){
+      GLOBALS.char.accel.speed = 0;
     }
     KEYSTATES.rightarrow = 'down';
   }

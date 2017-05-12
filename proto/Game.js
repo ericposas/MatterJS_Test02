@@ -1,4 +1,4 @@
-// GAME CLASS //
+// GAME 'CLASS' //
 function Game(){
   var _self = this;
   // create an engine
@@ -19,7 +19,7 @@ function Game(){
   if(!this.spritei){ this.spritei = 0; }
 }
 
-// METHODS AND PROPERTIES OF THE GAME CLASS 
+// METHODS AND PROPERTIES OF THE GAME 'CLASS' //
 
 // Initialization of Game 
 Game.prototype.start = function(){
@@ -49,26 +49,26 @@ Game.prototype.start = function(){
 Game.prototype.testBounds = function (){
   // stage stop-scroll bounds 
   if((this.currentLevel) &&
-     (this.currentLevel.bricks[0].position.x < Globals.stage.adjust) &&
-     (this.currentChar.position.x < Globals.char.walklimit.right)){
+     (this.currentLevel.bricks[0].position.x < GLOBALS.stage.adjust) &&
+     (this.currentChar.position.x < GLOBALS.char.walklimit.right)){
     this.leftBounds = false;
   }else{
     this.leftBounds = true;
   }
   if((this.currentLevel) &&
-     (this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - Globals.stage.adjust) &&
-     (this.currentChar.position.x > Globals.char.walklimit.left)){
+     (this.currentLevel.bricks[this.currentLevel.bricks.length-1].position.x > this.w - GLOBALS.stage.adjust) &&
+     (this.currentChar.position.x > GLOBALS.char.walklimit.left)){
     this.rightBounds = false;
   }else{
     this.rightBounds = true;
   }
   // character bounds 
-  if(this.currentChar && this.currentChar.position.x > Globals.stage.charlimit.begin){
+  if(this.currentChar && this.currentChar.position.x > GLOBALS.stage.charlimit.begin){
     this.charLeftBounds = false;
   }else{
     this.charLeftBounds = true;
   }
-  if(this.currentChar && this.currentChar.position.x < Globals.stage.charlimit.end){
+  if(this.currentChar && this.currentChar.position.x < GLOBALS.stage.charlimit.end){
     this.charRightBounds = false;
   }else{
     this.charRightBounds = true;
@@ -133,21 +133,21 @@ Game.prototype.scroll = function (){
 Game.prototype.move = function (direction){
   this.increaseSpeed();
   for(var i = 0; i < this.currentLevel.layout.length; i++){
-    Matter.Body.translate(this.currentLevel.layout[i], {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
+    Matter.Body.translate(this.currentLevel.layout[i], {x:(direction == 'right' ? GLOBALS.char.accel.speed : (GLOBALS.char.accel.speed*-1)), y:0});
   }
 }
 
 // Move character 
 Game.prototype.movechar = function(direction){
   this.increaseSpeed();
-  if(this.spritei < Globals.char.spriteswap.total_frames){
+  if(this.spritei < GLOBALS.char.spriteswap.total_frames){
     this.spritei++;
   }else{
     this.spritei = 0;
   }
   this.swapsprite(direction);
   if(this.leftBounds == true || this.rightBounds == true){
-    x_translate = (direction == 'right' ? (Globals.char.accel.speed) : ((Globals.char.accel.speed)*-1));
+    x_translate = (direction == 'right' ? (GLOBALS.char.accel.speed) : ((GLOBALS.char.accel.speed)*-1));
   }else{
     x_translate = (direction == 'right' ? 0 : 0);
   }
@@ -165,9 +165,9 @@ Game.prototype.swapsprite = function(direction){
   // array, and start again at position 0 when we reach the end 
   if(this.jumpState == 'jumping' && this.currentChar.render.sprite.texture != this.charSpriteset[2]){
     this.currentChar.render.sprite.texture = this.charSpriteset[2];
-  }else if(this.spritei > Globals.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
+  }else if(this.spritei > GLOBALS.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
     this.currentChar.render.sprite.texture = this.charSpriteset[1];
-  }else if(this.spritei < Globals.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
+  }else if(this.spritei < GLOBALS.char.spriteswap.frames_per_state && this.jumpState != 'jumping'){
     this.currentChar.render.sprite.texture = this.charSpriteset[0];
   }
   
@@ -175,8 +175,8 @@ Game.prototype.swapsprite = function(direction){
 
 // Increase speed 
 Game.prototype.increaseSpeed = function(){
-  if(Globals.char.accel.speed < Globals.char.accel.max){
-    Globals.char.accel.speed+=Globals.char.accel.rate; 
+  if(GLOBALS.char.accel.speed < GLOBALS.char.accel.max){
+    GLOBALS.char.accel.speed+=GLOBALS.char.accel.rate; 
   }
 }
 
@@ -208,17 +208,17 @@ Game.prototype.decelerate = function(direction){
   if(this.leftBounds == false && this.rightBounds == false){
     this.processDecel(direction);
   }else{
-    Globals.char.accel.speed = 0;
+    GLOBALS.char.accel.speed = 0;
   }
 }
 Game.prototype.processDecel = function (direction){
   var _self = this, d = direction;
   // if char speed is still over 0 (the min)
-  if( (Globals.char.accel.speed > Globals.char.accel.min) &&
+  if( (GLOBALS.char.accel.speed > GLOBALS.char.accel.min) &&
      (KEYSTATES.leftarrow != 'down') &&
      (KEYSTATES.rightarrow != 'down') ){
     // decrease speed and animate the change 
-    Globals.char.accel.speed = (Globals.char.accel.speed - Globals.char.accel.rate);
+    GLOBALS.char.accel.speed = (GLOBALS.char.accel.speed - GLOBALS.char.accel.rate);
     TweenLite.delayedCall(0.005, function(){
       _self.decel(d);
     });
@@ -227,18 +227,18 @@ Game.prototype.processDecel = function (direction){
 Game.prototype.decel = function (direction){
   if(this.leftBounds == false && this.rightBounds == false){
     for(var i = 0; i < this.currentLevel.layout.length; i++){
-      Matter.Body.translate(this.currentLevel.layout[i], {x:(direction == 'right' ? Globals.char.accel.speed : (Globals.char.accel.speed*-1)), y:0});
+      Matter.Body.translate(this.currentLevel.layout[i], {x:(direction == 'right' ? GLOBALS.char.accel.speed : (GLOBALS.char.accel.speed*-1)), y:0});
     }
     // call to make it recursive 
     this.processDecel(direction);
   }else{
-    Globals.char.accel.speed = 0;
+    GLOBALS.char.accel.speed = 0;
   }
 }
 Game.prototype.jump = function(){
   // apply jump force to character 
   if(this.jumpState != 'jumping'){
-    Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(Globals.char.jumpForce*-1)});
+    Matter.Body.applyForce(this.currentChar, this.currentChar.position, {x:0,y:(GLOBALS.char.jumpForce*-1)});
     this.charStandingOn = 'nothing';
   }
 }

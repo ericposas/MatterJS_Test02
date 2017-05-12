@@ -11,19 +11,12 @@ window.onload = function(){
   // GAME SET UP
   var lvl1 = new Level('Level1', Levels.level1);
   var game = new Game();
+  var keys = new Keys(game);
   game.addLevel(lvl1);
   game.start();
   game.w = 480;
   game.h = 800;
   game.name = "Super Julio";
   
-  
-  // KEY PRESSES OBJECT 
-  var keys = new Keys(game);
-  
-  //c.comment(game.currentChar.position.x);
-  TweenLite.delayedCall(2, function(){
-    //c.comment(game.currentChar.position.y);
-  });
-  
 }
+
