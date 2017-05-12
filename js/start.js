@@ -9,7 +9,7 @@ window.onload = function(){
   window.c = c;
   
   // GAME SET UP
-  var lvl1 = new Level('Level1', Levels.level1);
+  var lvl1 = new Level(Levels.level1);
   var game = new Game();
   var keys = new Keys(game);
   game.addLevel(lvl1);

@@ -1,9 +1,9 @@
 // LEVEL CLASS  
 
-function Level(name, rows){
-  var layout = this.layout(rows);
-  this.name = name;
-  this.rows = rows;
+function Level(level){
+  var layout = this.layout(level.lvl);
+  this.name = level.name;
+  this.rows = level.lvl;
   return {
     name:this.name,
     layout:layout,
